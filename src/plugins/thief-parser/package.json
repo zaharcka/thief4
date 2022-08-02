@@ -9,7 +9,8 @@
     "displayName": "Thief Parser"
   },
   "dependencies": {
-    "sitemapper": "^3.2.6"
+    "sitemapper": "^3.2.6",
+    "uuid": "^8.3.2"
   },
   "author": {
     "name": "A Strapi developer"

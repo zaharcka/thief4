@@ -1,4 +1,5 @@
 import FetchSiteButton from "./extensions/components/FetchSiteButton";
+import LoadHTMLForEmptyPagesButton from "./extensions/components/LoadHTMLForEmptyPagesButton";
 
 const config = {
   locales: [
@@ -31,10 +32,14 @@ const config = {
   ],
 };
 
-const bootstrap = app => {
+const bootstrap = (app) => {
   app.injectContentManagerComponent("editView", "right-links", {
     name: "FetchSiteButton",
-    Component: FetchSiteButton
+    Component: FetchSiteButton,
+  });
+  app.injectContentManagerComponent("editView", "right-links", {
+    name: "LoadHTMLForEmptyPages",
+    Component: LoadHTMLForEmptyPagesButton,
   });
 };
 

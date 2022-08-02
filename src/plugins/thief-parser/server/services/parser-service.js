@@ -1,5 +1,8 @@
 const Sitemapper = require("sitemapper");
-'use strict';
+const { v4: uuidv4 } = require("uuid");
+("use strict");
+
+let tasksStore = [];
 
 const getPagesOfSiteByItsSitemap = async (domain) => {
   if (domain) {
@@ -23,24 +26,38 @@ const getPagesOfSiteByItsSitemap = async (domain) => {
 };
 
 module.exports = ({ strapi }) => ({
+  async getTasksStore() {
+    return tasksStore;
+  },
   async parseAllPages(data) {
-    const {domain, id: site} = data;
+    const { domain, id: site } = data;
+    const taskId = uuidv4();
+    const task = {
+      type: "fetchBySitemap",
+      title: `Getting pages y sitemap of ${domain}`,
+      id: taskId,
+      affect: {
+        sites: [site],
+      },
+    };
+    tasksStore.push(task);
     const pagesArray = await getPagesOfSiteByItsSitemap(domain);
-    pagesArray.pages.sites.forEach(pagesURL => {
+    pagesArray.pages.sites.forEach((pagesURL) => {
       try {
-        strapi.entityService.create('api::page.page', {
+        strapi.entityService.create("api::page.page", {
           data: {
             URL: pagesURL,
-            site
-          }
-        })
+            site,
+          },
+        });
       } catch (e) {
-        console.log(`Error  while creating page ${pagesURL}`)
-      };
-    })
-
-
-    return 'ok';
-
-  }
+        console.log(`Error  while creating page ${pagesURL}`);
+      }
+    });
+    setTimeout(() => {
+      console.log("DELETE TASK...");
+      tasksStore = tasksStore.filter((item) => item.id !== taskId);
+    }, 10000);
+    return "ok";
+  },
 });
