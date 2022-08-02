@@ -8,4 +8,13 @@ module.exports = [
       auth: false,
     },
   },
+  {
+    method: 'POST',
+    path: '/parseSite/:id',
+    handler: 'parseController.getAllPages',
+    config: {
+      policies: [],
+      auth: false,
+    },
+  },
 ];
