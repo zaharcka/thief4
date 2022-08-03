@@ -4,7 +4,8 @@
   "info": {
     "singularName": "site",
     "pluralName": "sites",
-    "displayName": "Site"
+    "displayName": "Site",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -30,6 +31,14 @@
       "relation": "oneToMany",
       "target": "api::page.page",
       "mappedBy": "site"
+    },
+    "articles_parser_config": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "type": "json"
     }
   }
 }
