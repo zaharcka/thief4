@@ -1,17 +1,8 @@
 module.exports = [
   {
-    method: "GET",
-    path: "/",
-    handler: "myController.index",
-    config: {
-      policies: [],
-      auth: false,
-    },
-  },
-  {
     method: "POST",
     path: "/parseSite/:id",
-    handler: "parseController.getAllPages",
+    handler: "sitemapController.getPagesBySitemap",
     config: {
       policies: [],
       auth: false,
@@ -20,7 +11,16 @@ module.exports = [
   {
     method: "GET",
     path: "/getTaskStore",
-    handler: "parseController.getAllTask",
+    handler: "sitemapController.getAllTask",
+    config: {
+      policies: [],
+      auth: false,
+    },
+  },
+  {
+    method: "POST",
+    path: "/startCrawler/:id",
+    handler: "scrapingController.scrapingPagesBySite",
     config: {
       policies: [],
       auth: false,

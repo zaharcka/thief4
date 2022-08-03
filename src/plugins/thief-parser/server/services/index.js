@@ -1,9 +1,11 @@
-'use strict';
+"use strict";
 
-const myService = require('./my-service');
-const parseService = require('./parser-service');
+const parseService = require("./parser-service");
+const sitemapService = require("./sitemap-service");
+const scrapingService = require("./scraping-service");
 
 module.exports = {
-  myService,
-  parseService
+  parseService,
+  sitemapService,
+  scrapingService,
 };

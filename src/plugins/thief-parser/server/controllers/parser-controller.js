@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = ({ strapi }) => ({
-  async getAllPages(ctx) {
+  /*async getAllPages(ctx) {
     const {
       request: { body },
     } = ctx;
@@ -9,11 +9,5 @@ module.exports = ({ strapi }) => ({
       .plugin("thief-parser")
       .service("parseService")
       .parseAllPages(body);
-  },
-  async getAllTask(ctx) {
-    ctx.body = await strapi
-      .plugin("thief-parser")
-      .service("parseService")
-      .getTasksStore();
-  },
+  },*/
 });

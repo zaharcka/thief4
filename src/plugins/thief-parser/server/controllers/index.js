@@ -1,9 +1,11 @@
-'use strict';
+"use strict";
 
-const myController = require('./my-controller');
-const parseController = require('./parser-controller');
+const parseController = require("./parser-controller");
+const sitemapController = require("./sitemap-controller");
+const scrapingController = require("./scraping-controller");
 
 module.exports = {
-  myController,
-  parseController
+  parseController,
+  sitemapController,
+  scrapingController,
 };
