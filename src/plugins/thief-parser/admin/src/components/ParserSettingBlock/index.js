@@ -4,6 +4,7 @@ import { Box } from "@strapi/design-system/Box";
 import { Divider } from "@strapi/design-system/Divider";
 import axios from "axios";
 import InputJSON from "../InputJSON";
+import ParserPreviewer from "../ParserPreviewer";
 
 const ParserSettingModule = () => {
   const [allSites, setAllSites] = useState([]);
@@ -46,6 +47,7 @@ const ParserSettingModule = () => {
       </SimpleMenu>
 
       {JSONLine && <InputJSON name={"Parse config"} value={JSONLine} />}
+      {JSONLine && <ParserPreviewer siteId={selectedSite.id} />}
     </Box>
   );
 };
