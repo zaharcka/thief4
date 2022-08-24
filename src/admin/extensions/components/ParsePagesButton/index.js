@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@strapi/design-system/Button";
 import ManyWays from "@strapi/icons/ManyWays";
 import { useCMEditViewDataManager } from "@strapi/helper-plugin";
+import { Button } from "@strapi/design-system/Button";
 import axios from "axios";
 
-const FetchSiteButton = () => {
-  const { modifiedData: currentSite, layout } = useCMEditViewDataManager();
-  if (layout.uid !== "api::site.site") {
-    return null;
-  }
+const ParsePagesButton = () => {
   const [disabled, setIsDisabled] = useState(false);
-  const [buttonText, setButtonText] = useState("Parse sitemap");
+  const [buttonText, setButtonText] = useState(
+    "Start parse empty pages by config"
+  );
+  const { modifiedData: currentSite, layout } = useCMEditViewDataManager();
 
   let taskUpdater;
 
+  const handleStartParsingPages = async () => {
+    try {
+      const res = await axios.post(
+        `http://localhost:1337/thief-parser/startParsing/${currentSite.id}`,
+        { id: currentSite.id }
+      );
+    } catch (e) {
+      console.log("Error while handle click >>>", e);
+    }
+  };
+
   const updateActivity = async () => {
     const res = await axios.get(
-      `http://localhost:1337/thief-parser/getTaskStore`
+      `http://localhost:1337/thief-parser/startParsing/${currentSite}`
     );
     const tasks = res.data;
     if (!tasks) {
@@ -26,7 +36,7 @@ const FetchSiteButton = () => {
       (task) =>
         task.affect.sites.some(
           (affectedSite) => currentSite.id === affectedSite
-        ) && task.type === "fetchBySitemap"
+        ) && task.type === "parsingSiteByConfig"
     );
     if (isAffected) {
       setIsDisabled(true);
@@ -57,26 +67,6 @@ const FetchSiteButton = () => {
     };
   }, [disabled]);
 
-  useEffect(async () => {
-    await updateActivity();
-  }, []);
-
-  const handleStartScrapingPages = async () => {
-    try {
-      const { id } = currentSite;
-      const res = await axios.post(
-        `http://localhost:1337/thief-parser/parseSite/${id}`,
-        currentSite
-      );
-      if (res.data === "ok") {
-        setIsDisabled(true);
-        setButtonText("Sitemap is being scanned");
-      }
-    } catch (e) {
-      console.log("Error>>>", e);
-    }
-  };
-
   return (
     <Button
       size="S"
@@ -84,7 +74,7 @@ const FetchSiteButton = () => {
       style={{ width: "100%" }}
       to={"/"}
       variant="secondary"
-      onClick={handleStartScrapingPages}
+      onClick={handleStartParsingPages}
       disabled={disabled}
     >
       {buttonText}
@@ -92,4 +82,4 @@ const FetchSiteButton = () => {
   );
 };
 
-export default FetchSiteButton;
+export default ParsePagesButton;

@@ -8,8 +8,6 @@ module.exports = ({ strapi }) => ({
       filters: { site: data.id },
     });
 
-    console.log("pages>>>>", pages);
-
     for (const page of pages) {
       const content = await axios.get(`${page.URL}`);
       await strapi.entityService.update("api::page.page", page.id, {
@@ -17,10 +15,8 @@ module.exports = ({ strapi }) => ({
           html: content.data,
         },
       });
-      console.log(`Page ${page.URL} saved`);
+      //console.log(`Page ${page.URL} saved`);
     }
-
-    console.log("fillPagesByHTMLbySiteId>>>>");
     return "res";
   },
 });

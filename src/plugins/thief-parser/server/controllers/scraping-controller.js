@@ -3,7 +3,6 @@ module.exports = ({ strapi }) => ({
     const {
       request: { body },
     } = ctx;
-
     ctx.body = "ok";
     await strapi
       .plugin("thief-parser")

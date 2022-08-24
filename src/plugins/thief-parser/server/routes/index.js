@@ -26,4 +26,13 @@ module.exports = [
       auth: false,
     },
   },
+  {
+    method: "POST",
+    path: "/startParsing/:id",
+    handler: "parseController.parseAllPages",
+    config: {
+      policies: [],
+      auth: false,
+    },
+  },
 ];

@@ -1,8 +1,10 @@
 const Sitemapper = require("sitemapper");
 const { v4: uuidv4 } = require("uuid");
-("use strict");
+let store = require("../taskStore");
 
-let tasksStore = [];
+let taskStore = store().taskStore;
+
+("use strict");
 
 const getPagesOfSiteByItsSitemap = async (domain) => {
   if (domain) {
@@ -27,7 +29,7 @@ const getPagesOfSiteByItsSitemap = async (domain) => {
 
 module.exports = ({ strapi }) => ({
   async getTasksStore() {
-    return tasksStore;
+    return taskStore.taskStore;
   },
   async getPagesBySitemap(data) {
     const { domain, id: site } = data;
@@ -40,7 +42,7 @@ module.exports = ({ strapi }) => ({
         sites: [site],
       },
     };
-    tasksStore.push(task);
+    taskStore.push(task);
     const pagesArray = await getPagesOfSiteByItsSitemap(domain);
     pagesArray.pages.sites.forEach((pagesURL) => {
       try {
@@ -56,7 +58,7 @@ module.exports = ({ strapi }) => ({
     });
     setTimeout(() => {
       console.log("DELETE TASK...");
-      tasksStore = tasksStore.filter((item) => item.id !== taskId);
+      taskStore = taskStore.filter((item) => item.id !== taskId);
     }, 10000);
     return "ok";
   },
