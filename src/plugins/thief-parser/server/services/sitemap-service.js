@@ -49,7 +49,7 @@ module.exports = ({ strapi }) => ({
     const pagesArray = await getPagesOfSiteByItsSitemap(domain);
     console.log("HERE2, pagesArray length>>>>", pagesArray.totalPages);
 
-    pagesArray.pages.sites.forEach((pagesURL, index, array) => {
+    /*pagesArray.pages.sites.forEach((pagesURL, index, array) => {
       try {
         console.log(`creating.... ${index + 1}/${array.length}`, pagesURL);
         // TODO AWAIT !!!!
@@ -62,7 +62,30 @@ module.exports = ({ strapi }) => ({
       } catch (e) {
         console.log(`Error  while creating page ${pagesURL}`);
       }
-    });
+    });*/
+
+    let index = 0;
+
+    for (const pagesURL of pagesArray.pages.sites) {
+      const sleshes = pagesURL.split("/").length - 1;
+      if (sleshes < 4) {
+        console.log(
+          `creating.... ${index + 1}/${pagesArray.pages.sites.length}`,
+          pagesURL
+        );
+        await strapi.entityService.create("api::page.page", {
+          data: {
+            URL: pagesURL,
+            site,
+          },
+        });
+        console.log(`creating success`);
+      } else {
+        console.log(`Pass ${pagesURL} 'cause sleshes = ${sleshes}`, pagesURL);
+      }
+
+      index = index + 1;
+    }
   },
   async clearAllPages(data) {
     console.log("clearAllPages >>>>", data.domain);

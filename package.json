@@ -17,7 +17,8 @@
     "@strapi/plugin-users-permissions": "4.3.2",
     "@strapi/strapi": "4.3.2",
     "better-sqlite3": "7.4.6",
-    "cheerio": "^1.0.0-rc.12"
+    "cheerio": "^1.0.0-rc.12",
+    "mysql": "^2.18.1"
   },
   "author": {
     "name": "A Strapi developer"
