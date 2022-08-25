@@ -21,15 +21,12 @@ module.exports = ({ strapi }) => ({
         selectorsForDelete,
       } = parseConfig;
       const A = cheerio.load(html);
-
       const res = A(contentSelector, contentContext);
       selectorsForDelete.forEach((selector) => {
         res.find(selector).remove();
       });
       let title = A(titleSelector, titleContext).text();
-
       const render = res.html() ? res.html().trim() : res.html();
-
       return {
         title,
         content: render,

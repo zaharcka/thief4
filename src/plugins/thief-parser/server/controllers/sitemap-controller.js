@@ -16,4 +16,11 @@ module.exports = ({ strapi }) => ({
       .service("sitemapService")
       .getTasksStore();
   },
+  async clearPageList(ctx) {
+    (ctx.body = "ok"),
+      await strapi
+        .plugin("thief-parser")
+        .service("sitemapService")
+        .clearAllPages();
+  },
 });

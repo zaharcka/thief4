@@ -35,4 +35,13 @@ module.exports = [
       auth: false,
     },
   },
+  {
+    method: "POST",
+    path: "/clearAllPages/:id",
+    handler: "sitemapController.clearPageList",
+    config: {
+      policies: [],
+      auth: false,
+    },
+  },
 ];

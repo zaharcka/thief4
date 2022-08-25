@@ -1,6 +1,7 @@
 const Sitemapper = require("sitemapper");
 const { v4: uuidv4 } = require("uuid");
 let store = require("../taskStore");
+const axios = require("axios");
 
 let taskStore = store().taskStore;
 
@@ -32,6 +33,7 @@ module.exports = ({ strapi }) => ({
     return taskStore.taskStore;
   },
   async getPagesBySitemap(data) {
+    console.log("getPagesBySitemap >>>>", data.domain);
     const { domain, id: site } = data;
     const taskId = uuidv4();
     const task = {
@@ -43,9 +45,14 @@ module.exports = ({ strapi }) => ({
       },
     };
     taskStore.push(task);
+    console.log("HERE1, site>>>>", site);
     const pagesArray = await getPagesOfSiteByItsSitemap(domain);
-    pagesArray.pages.sites.forEach((pagesURL) => {
+    console.log("HERE2, pagesArray length>>>>", pagesArray.totalPages);
+
+    pagesArray.pages.sites.forEach((pagesURL, index, array) => {
       try {
+        console.log(`creating.... ${index + 1}/${array.length}`, pagesURL);
+        // TODO AWAIT !!!!
         strapi.entityService.create("api::page.page", {
           data: {
             URL: pagesURL,
@@ -56,10 +63,18 @@ module.exports = ({ strapi }) => ({
         console.log(`Error  while creating page ${pagesURL}`);
       }
     });
-    setTimeout(() => {
-      console.log("DELETE TASK...");
-      taskStore = taskStore.filter((item) => item.id !== taskId);
-    }, 10000);
-    return "ok";
+  },
+  async clearAllPages(data) {
+    console.log("clearAllPages >>>>", data.domain);
+    const { domain, id: site } = data;
+    const pages = await strapi.entityService.findMany("api::page.page", {
+      fields: ["URL", "id"],
+      filters: { site: data.id },
+    });
+
+    for (const page of pages) {
+      await strapi.entityService.delete("api::page.page", page.id);
+      console.log(`Page ${page.URL} deleted`);
+    }
   },
 });
