@@ -12,12 +12,17 @@ module.exports = ({ strapi }) => ({
     for (const page of pages) {
       console.log(`Getting HTML.... ${i}/${pages.length}`, page.URL);
       const content = await axios.get(`${page.URL}`);
-      await strapi.entityService.update("api::page.page", page.id, {
-        data: {
-          html: content.data,
-        },
-      });
-      console.log(`Page ${page.URL} saved`);
+      try {
+        await strapi.entityService.update("api::page.page", page.id, {
+          data: {
+            html: content.data,
+          },
+        });
+        console.log(`Page ${page.URL} saved`);
+      } catch (e) {
+        console.log(`Page ${page.URL} not been saved`);
+      }
+      i = i + 1;
     }
     return "res";
   },

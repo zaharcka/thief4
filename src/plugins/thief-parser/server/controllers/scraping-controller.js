@@ -1,10 +1,10 @@
 module.exports = ({ strapi }) => ({
-  async scrapingPagesBySite(ctx) {
+  scrapingPagesBySite(ctx) {
     const {
       request: { body },
     } = ctx;
     ctx.body = "ok";
-    await strapi
+    strapi
       .plugin("thief-parser")
       .service("scrapingService")
       .fillPagesByHTMLbySiteId(body);

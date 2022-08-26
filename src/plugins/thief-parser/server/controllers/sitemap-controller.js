@@ -5,12 +5,14 @@ module.exports = ({ strapi }) => ({
     const {
       request: { body },
     } = ctx;
-    ctx.body = await strapi
+    ctx.body = "ok";
+    strapi
       .plugin("thief-parser")
       .service("sitemapService")
       .getPagesBySitemap(body);
   },
   async getAllTask(ctx) {
+    console.log("sitemap controller getAllTask");
     ctx.body = await strapi
       .plugin("thief-parser")
       .service("sitemapService")

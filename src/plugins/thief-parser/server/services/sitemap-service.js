@@ -29,9 +29,7 @@ const getPagesOfSiteByItsSitemap = async (domain) => {
 };
 
 module.exports = ({ strapi }) => ({
-  async getTasksStore() {
-    return taskStore.taskStore;
-  },
+  getTasksStore: async () => taskStore,
   async getPagesBySitemap(data) {
     console.log("getPagesBySitemap >>>>", data.domain);
     const { domain, id: site } = data;
@@ -45,27 +43,8 @@ module.exports = ({ strapi }) => ({
       },
     };
     taskStore.push(task);
-    console.log("HERE1, site>>>>", site);
     const pagesArray = await getPagesOfSiteByItsSitemap(domain);
-    console.log("HERE2, pagesArray length>>>>", pagesArray.totalPages);
-
-    /*pagesArray.pages.sites.forEach((pagesURL, index, array) => {
-      try {
-        console.log(`creating.... ${index + 1}/${array.length}`, pagesURL);
-        // TODO AWAIT !!!!
-        strapi.entityService.create("api::page.page", {
-          data: {
-            URL: pagesURL,
-            site,
-          },
-        });
-      } catch (e) {
-        console.log(`Error  while creating page ${pagesURL}`);
-      }
-    });*/
-
     let index = 0;
-
     for (const pagesURL of pagesArray.pages.sites) {
       const sleshes = pagesURL.split("/").length - 1;
       if (sleshes < 4) {
@@ -73,19 +52,23 @@ module.exports = ({ strapi }) => ({
           `creating.... ${index + 1}/${pagesArray.pages.sites.length}`,
           pagesURL
         );
-        await strapi.entityService.create("api::page.page", {
-          data: {
-            URL: pagesURL,
-            site,
-          },
-        });
-        console.log(`creating success`);
+        try {
+          await strapi.entityService.create("api::page.page", {
+            data: {
+              URL: pagesURL,
+              site,
+            },
+          });
+          console.log(`creating success`);
+        } catch (e) {
+          console.log(`creating not success`);
+        }
       } else {
         console.log(`Pass ${pagesURL} 'cause sleshes = ${sleshes}`, pagesURL);
       }
-
       index = index + 1;
     }
+    taskStore = taskStore.filter((task) => task.id !== taskId);
   },
   async clearAllPages(data) {
     console.log("clearAllPages >>>>", data.domain);
